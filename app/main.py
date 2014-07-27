@@ -1,5 +1,6 @@
 ##########
 
+import re
 import sys
 import json
 import logging
@@ -12,13 +13,6 @@ from google.appengine.api import memcache
 from StringIO import StringIO
 
 from base_handler import BaseHandler
-
-##########
-
-config = {}
-config['webapp2_extras.sessions'] = {
-    'secret_key': 'my-super-secret-key',
-}
 
 ##########
 
@@ -52,6 +46,14 @@ class Processor(BaseHandler):
         sys.stdout = sys.__stdout__
         result = buffer.getvalue()
         return result
+
+    def valid_id(self, user_id):
+        regex = re.compile(r'^[a-zA-Z0-9]{8}$')
+        match = regex.match(user_id)
+        if match:
+            return True
+        else:
+            return False
     
     def get(self, **kw):
         user_id = kw['user_id']
@@ -62,13 +64,16 @@ class Processor(BaseHandler):
 
     def post(self, **kw):
         user_id = kw['user_id']
-        code = self.request.get('code')
-        try:
-          result = self.sandbox(code)
-        except Exception, error:
-          result = str(error)
-        logging.info(result)
-        memcache.set(user_id, result)
+        if self.valid_id(user_id):
+            code = self.request.get('code')
+            try:
+              result = self.sandbox(code)
+            except Exception, error:
+              result = str(error)
+            logging.info(result)
+            memcache.set(user_id, result)
+        else:
+            self.error(500)
             
 ##########
 
