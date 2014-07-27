@@ -63,7 +63,10 @@ class Processor(BaseHandler):
     def post(self, **kw):
         user_id = kw['user_id']
         code = self.request.get('code')
-        result = self.sandbox(code)
+        try:
+          result = self.sandbox(code)
+        except Exception, error:
+          result = str(error)
         logging.info(result)
         memcache.set(user_id, result)
             
