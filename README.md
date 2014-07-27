@@ -10,7 +10,7 @@ Details
 -------
 The backend (Python interpreter) is actually a web application made with [Google App Engine](https://cloud.google.com/products/app-engine/).
 
-It can be accessed via http:/www.pyonlineapi.appspot.
+It can be accessed via www.pyonlineapi.appspot.
 
 The user interface is built with Touchdevelop where it constantly interacts with the web application.
 
