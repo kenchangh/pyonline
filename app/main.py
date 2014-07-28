@@ -16,6 +16,22 @@ from base_handler import BaseHandler
 
 ##########
 
+config = {}
+config['webapp2_extras.sessions'] = {
+    'secret_key': 'my-super-secret-key',
+}
+
+##########
+
+class FrontPage(BaseHandler):
+
+    def get(self):
+        self.render('index.html')
+
+    def post(self):
+        pass
+
+
 class Processor(BaseHandler):
     """
     Processes code in a sanbox environment.
@@ -78,7 +94,8 @@ class Processor(BaseHandler):
 ##########
 
 app = webapp2.WSGIApplication([
-      Route('/<user_id>', handler = Processor)],
+      ('/', FrontPage),
+      Route('/process/<user_id>', handler = Processor)],
       config = config, debug = True)
 
 if __name__ == '__main__':
