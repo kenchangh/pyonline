@@ -1,10 +1,6 @@
 PyOnline
 ========
-PyOnline is a Python interpreter, made with Windows' Touchdevelop platform.
-
-This is for you, Taylor's SOCIT.
-
-![Taylor's University School of Computing and IT](http://www.taylors.edu.my/img/TU_logo.jpg)
+PyOnline is a online Python interpreter.
 
 Details
 -------
