@@ -85,9 +85,10 @@ class Processor(BaseHandler):
             try:
               result = self.sandbox(code)
             except Exception, error:
-              result = str(error)
+                result = 'ERROR: ' + str(error)
             logging.info(result)
             memcache.set(user_id, result)
+            self.response.set_cookie('output', result)
         else:
             self.error(500)
             

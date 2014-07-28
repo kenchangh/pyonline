@@ -57,7 +57,7 @@
     </nav>
 
   <div class="container">
-    <div class="col-md-6"> 
+    <div class="col-md-8"> 
       <div id="editor"></div>
       <br/>
       <button id="run-btn" class="btn btn-lg btn-success">Run</button>
@@ -116,7 +116,7 @@ var accessPoint = '/process/' + userID;
 
 // Python processing
 $('#run-btn').click(function() {
-  var outputBox = $('#output-box')
+  var outputBox = $('#output-box');
   outputBox.empty();
 
   $.ajax({
@@ -126,17 +126,27 @@ $('#run-btn').click(function() {
       code: editor.getValue()
     }
   }).done(function() {
-    $.ajax({
-      url: accessPoint,
-      success: function(output) {
-        if (output == ''){
-          output = 'Nothing happened...';
-        }
-        outputBox.append('<p>' + output + '</p>'); 
-      }
-    });
+    function getCookie(name) {
+      var re = new RegExp(name + "=([^;]+)");
+      var value = re.exec(document.cookie);
+      return (value != null) ? unescape(value[1]) : null;
+    }
+    var output = getCookie('output')
+    
+    var style = '';
+    if (output === '') {
+      output = 'Nothing happened...';
+      style = ' class="text-primary"';
+    }
+    else if ( output.match(/ERROR/) ) {
+       style = ' class="text-danger"';
+    }
+    outputBox.append('<p' + style + '>' + output + '</p>'); 
+
   });
 });
+
+
 </script>
 
   </body>
