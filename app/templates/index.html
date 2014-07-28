@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>PyOnline - Python Interpreter</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="An online Python interpreter">
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" media="screen"/>
+<style type="text/css" media="screen">
+    #editor { 
+      height: 30em;
+      max-height: 30em;
+      width: 100%;
+    }
+
+    #output-box {
+      height: 30em;
+      padding
+    }
+
+    .navbar {
+      z-index: 1;
+    }
+</style>
+  </head>
+  <body>
+    <a href="https://github.com/maverick97/pyonline"><img
+      style="position: absolute; top: 0; right: 0; border: 0; z-index: 2;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <nav class="navbar navbar-static-top navbar-default" role="navigation">
+      <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/">PyOnline</a>
+        </div>
+    
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/">Home</a></li>
+            <li><a href="/usage">Usage</a></li>
+          </ul>
+        </div>
+      </div> 
+    </nav>
+
+  <div class="container">
+    <div class="col-md-6"> 
+      <div id="editor"></div>
+      <br/>
+      <button id="run-btn" class="btn btn-lg btn-success">Run</button>
+    </div>
+    <div id="output-box" class="well col-md-4">
+    </div>
+  </div>
+
+  <script src="/static/js/jquery.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js"></script>
+
+<script>
+// Editor settings
+var editor = ace.edit("editor");
+editor.setFontSize(15);
+editor.setTheme("ace/theme/monokai");
+editor.getSession().setMode("ace/mode/python");
+
+// Random 8-character generator
+function generateID() {
+  var ALPHABETS = ['a', 'b', 'c', 'd', 'e', 'f',
+                   'g', 'h', 'i', 'j', 'k', 'l',
+                   'm', 'n', 'o', 'p', 'q', 'r',
+                   's', 't', 'u', 'v', 'w', 'x',
+                   'y', 'z', 'A', 'B', 'C', 'D',
+                   'E', 'F', 'G', 'H', 'I', 'J',
+                   'K', 'L', 'M', 'N', 'O', 'P',
+                   'Q', 'R', 'S', 'T', 'U', 'V',
+                   'W', 'X', 'Y', 'Z'];
+  var userID = '';
+  for (var i = 0; i < 8; i++) {
+    userID += ALPHABETS[Math.floor(Math.random() * ALPHABETS.length)];
+  }
+  return userID
+}
+
+var userID = generateID();
+var accessPoint = '/process/' + userID;
+
+// Python processing
+$('#run-btn').click(function() {
+  var outputBox = $('#output-box')
+  outputBox.empty();
+
+  $.ajax({
+    type: 'POST',
+    url: accessPoint,
+    data: {
+      code: editor.getValue()
+    }
+  }).done(function() {
+    $.ajax({
+      url: accessPoint,
+      success: function(output) {
+        if (output == ''){
+          output = 'Nothing happened...';
+        }
+        outputBox.append('<p>' + output + '</p>'); 
+      }
+    });
+  });
+});
+</script>
+
+  </body>
+</html>
+
