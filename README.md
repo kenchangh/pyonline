@@ -18,7 +18,7 @@ Each user will need to access the API with a user_id, which is
 generated on the client's side. Actually, anything will do, as long as it is randomly generated and is 8 characters long.
 
 **Example:**
-`http:/www.pyonlineapi.appspot/<user_id>`
+`http:/www.pyonlineapi.appspot/process/<user_id>`
 
 The code will be sent via a POST request in a url encoded manner.
 Then, accessed at the same url with a GET request.
@@ -31,8 +31,8 @@ Then, accessed at the same url with a GET request.
 >> data = { 'code': "print 'hello world'" }
 >> data = urlencode(data)
 >> # Send POST request with extra data parameter in urlopen
->> urlopen('http://www.pyonline.appspot/eRbBHp2c', data)
->> result = urlopen('http://www.pyonline.appspot/eRbBHp2c')
+>> urlopen('http://www.pyonline.appspot/process/eRbBHp2c', data)
+>> result = urlopen('http://www.pyonline.appspot/process/eRbBHp2c')
 >> result.read() # hello world
 hello world
 ```
